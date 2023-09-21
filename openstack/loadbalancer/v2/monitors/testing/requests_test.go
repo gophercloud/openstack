@@ -63,15 +63,37 @@ func TestCreateHealthmonitor(t *testing.T) {
 		PoolID:         "84f1b61f-58c4-45bf-a8a9-2dafb9e5214d",
 		ProjectID:      "453105b9-1754-413f-aab1-55f1af620750",
 		Delay:          20,
+		DomainName:     "example.com",
 		Timeout:        10,
 		MaxRetries:     5,
 		MaxRetriesDown: 4,
+		HTTPVersion:    1.1,
 		URLPath:        "/check",
 		ExpectedCodes:  "200-299",
 	}).Extract()
 	th.AssertNoErr(t, err)
 
 	th.CheckDeepEquals(t, HealthmonitorDb, *actual)
+}
+
+func TestCreatePingHealthmonitor(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandlePingHealthmonitorCreationSuccessfully(t, CreatePingHealthmonitorBody)
+
+	actual, err := monitors.Create(fake.ServiceClient(), monitors.CreateOpts{
+		Type:           "PING",
+		Name:           "web",
+		PoolID:         "84f1b61f-58c4-45bf-a8a9-2dafb9e5214d",
+		ProjectID:      "83657cfcdfe44cd5920adaf26c48ceea",
+		Delay:          10,
+		Timeout:        1,
+		MaxRetries:     1,
+		MaxRetriesDown: 7,
+	}).Extract()
+	th.AssertNoErr(t, err)
+
+	th.CheckDeepEquals(t, HealthmonitorWeb, *actual)
 }
 
 func TestRequiredCreateOpts(t *testing.T) {
@@ -118,9 +140,11 @@ func TestUpdateHealthmonitor(t *testing.T) {
 	actual, err := monitors.Update(client, "5d4b5228-33b0-4e60-b225-9b727c1a20e7", monitors.UpdateOpts{
 		Name:           &name,
 		Delay:          3,
+		DomainName:     "www.example.com",
 		Timeout:        20,
 		MaxRetries:     10,
 		MaxRetriesDown: 8,
+		HTTPVersion:    1.0,
 		URLPath:        "/another_check",
 		ExpectedCodes:  "301",
 	}).Extract()
@@ -129,6 +153,27 @@ func TestUpdateHealthmonitor(t *testing.T) {
 	}
 
 	th.CheckDeepEquals(t, HealthmonitorUpdated, *actual)
+}
+
+func TestUpdatePingHealthmonitor(t *testing.T) {
+	th.SetupHTTP()
+	defer th.TeardownHTTP()
+	HandlePingHealthmonitorUpdateSuccessfully(t)
+
+	client := fake.ServiceClient()
+	name := "NewHealthmonitorName"
+	actual, err := monitors.Update(client, "5d4b5228-33b0-4e60-b225-9b727c1a20e7", monitors.UpdateOpts{
+		Name:           &name,
+		Delay:          3,
+		Timeout:        20,
+		MaxRetries:     10,
+		MaxRetriesDown: 8,
+	}).Extract()
+	if err != nil {
+		t.Fatalf("Unexpected Update error: %v", err)
+	}
+
+	th.CheckDeepEquals(t, HealthmonitorWebUpdated, *actual)
 }
 
 func TestDelayMustBeGreaterOrEqualThanTimeout(t *testing.T) {
