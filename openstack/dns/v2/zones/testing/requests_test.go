@@ -11,12 +11,12 @@ import (
 )
 
 func TestList(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListSuccessfully(t, fakeServer)
 
 	count := 0
-	err := zones.List(client.ServiceClient(), nil).EachPage(context.TODO(), func(_ context.Context, page pagination.Page) (bool, error) {
+	err := zones.List(client.ServiceClient(fakeServer), nil).EachPage(context.TODO(), func(_ context.Context, page pagination.Page) (bool, error) {
 		count++
 		actual, err := zones.ExtractZones(page)
 		th.AssertNoErr(t, err)
@@ -29,11 +29,11 @@ func TestList(t *testing.T) {
 }
 
 func TestListAllPages(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleListSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleListSuccessfully(t, fakeServer)
 
-	allPages, err := zones.List(client.ServiceClient(), nil).AllPages(context.TODO())
+	allPages, err := zones.List(client.ServiceClient(fakeServer), nil).AllPages(context.TODO())
 	th.AssertNoErr(t, err)
 	allZones, err := zones.ExtractZones(allPages)
 	th.AssertNoErr(t, err)
@@ -41,19 +41,19 @@ func TestListAllPages(t *testing.T) {
 }
 
 func TestGet(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleGetSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleGetSuccessfully(t, fakeServer)
 
-	actual, err := zones.Get(context.TODO(), client.ServiceClient(), "a86dba58-0043-4cc6-a1bb-69d5e86f3ca3").Extract()
+	actual, err := zones.Get(context.TODO(), client.ServiceClient(fakeServer), "a86dba58-0043-4cc6-a1bb-69d5e86f3ca3").Extract()
 	th.AssertNoErr(t, err)
 	th.CheckDeepEquals(t, &FirstZone, actual)
 }
 
 func TestCreate(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleCreateSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleCreateSuccessfully(t, fakeServer)
 
 	createOpts := zones.CreateOpts{
 		Name:        "example.org.",
@@ -63,15 +63,15 @@ func TestCreate(t *testing.T) {
 		Description: "This is an example zone.",
 	}
 
-	actual, err := zones.Create(context.TODO(), client.ServiceClient(), createOpts).Extract()
+	actual, err := zones.Create(context.TODO(), client.ServiceClient(fakeServer), createOpts).Extract()
 	th.AssertNoErr(t, err)
 	th.CheckDeepEquals(t, &CreatedZone, actual)
 }
 
 func TestUpdate(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleUpdateSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleUpdateSuccessfully(t, fakeServer)
 
 	var description = "Updated Description"
 	updateOpts := zones.UpdateOpts{
@@ -85,15 +85,15 @@ func TestUpdate(t *testing.T) {
 	UpdatedZone.TTL = 600
 	UpdatedZone.Description = "Updated Description"
 
-	actual, err := zones.Update(context.TODO(), client.ServiceClient(), UpdatedZone.ID, updateOpts).Extract()
+	actual, err := zones.Update(context.TODO(), client.ServiceClient(fakeServer), UpdatedZone.ID, updateOpts).Extract()
 	th.AssertNoErr(t, err)
 	th.CheckDeepEquals(t, &UpdatedZone, actual)
 }
 
 func TestDelete(t *testing.T) {
-	th.SetupHTTP()
-	defer th.TeardownHTTP()
-	HandleDeleteSuccessfully(t)
+	fakeServer := th.SetupHTTP()
+	defer fakeServer.Teardown()
+	HandleDeleteSuccessfully(t, fakeServer)
 
 	DeletedZone := CreatedZone
 	DeletedZone.Status = "PENDING"
@@ -101,7 +101,7 @@ func TestDelete(t *testing.T) {
 	DeletedZone.TTL = 600
 	DeletedZone.Description = "Updated Description"
 
-	actual, err := zones.Delete(context.TODO(), client.ServiceClient(), DeletedZone.ID).Extract()
+	actual, err := zones.Delete(context.TODO(), client.ServiceClient(fakeServer), DeletedZone.ID).Extract()
 	th.AssertNoErr(t, err)
 	th.CheckDeepEquals(t, &DeletedZone, actual)
 }

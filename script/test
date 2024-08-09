@@ -4,4 +4,4 @@
 
 set -euxo pipefail
 
-go test -v -tags 'acceptance fixtures' ./... $@
+go test -v -shuffle on -tags 'acceptance fixtures' ./... $@

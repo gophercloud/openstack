@@ -6,7 +6,7 @@ import (
 	"testing"
 
 	"github.com/gophercloud/gophercloud/v2/openstack/compute/v2/hypervisors"
-	"github.com/gophercloud/gophercloud/v2/testhelper"
+	th "github.com/gophercloud/gophercloud/v2/testhelper"
 	"github.com/gophercloud/gophercloud/v2/testhelper/client"
 )
 
@@ -541,41 +541,41 @@ var (
 	}
 )
 
-func HandleHypervisorsStatisticsSuccessfully(t *testing.T) {
-	testhelper.Mux.HandleFunc("/os-hypervisors/statistics", func(w http.ResponseWriter, r *http.Request) {
-		testhelper.TestMethod(t, r, "GET")
-		testhelper.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+func HandleHypervisorsStatisticsSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/os-hypervisors/statistics", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, HypervisorsStatisticsBody)
 	})
 }
 
-func HandleHypervisorListPre253Successfully(t *testing.T) {
-	testhelper.Mux.HandleFunc("/os-hypervisors/detail", func(w http.ResponseWriter, r *http.Request) {
-		testhelper.TestMethod(t, r, "GET")
-		testhelper.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+func HandleHypervisorListPre253Successfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/os-hypervisors/detail", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, HypervisorListBodyPre253)
 	})
 }
 
-func HandleHypervisorListSuccessfully(t *testing.T) {
-	testhelper.Mux.HandleFunc("/os-hypervisors/detail", func(w http.ResponseWriter, r *http.Request) {
-		testhelper.TestMethod(t, r, "GET")
-		testhelper.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+func HandleHypervisorListSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/os-hypervisors/detail", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, HypervisorListBody)
 	})
 }
 
-func HandleHypervisorListWithParametersSuccessfully(t *testing.T) {
-	testhelper.Mux.HandleFunc("/os-hypervisors/detail", func(w http.ResponseWriter, r *http.Request) {
-		testhelper.TestMethod(t, r, "GET")
-		testhelper.TestHeader(t, r, "X-Auth-Token", client.TokenID)
-		testhelper.TestFormValues(t, r, map[string]string{
+func HandleHypervisorListWithParametersSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/os-hypervisors/detail", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+		th.TestFormValues(t, r, map[string]string{
 			"with_servers": "true",
 		})
 
@@ -584,30 +584,30 @@ func HandleHypervisorListWithParametersSuccessfully(t *testing.T) {
 	})
 }
 
-func HandleHypervisorGetSuccessfully(t *testing.T) {
-	testhelper.Mux.HandleFunc("/os-hypervisors/"+HypervisorFake.ID, func(w http.ResponseWriter, r *http.Request) {
-		testhelper.TestMethod(t, r, "GET")
-		testhelper.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+func HandleHypervisorGetSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/os-hypervisors/"+HypervisorFake.ID, func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, HypervisorGetBody)
 	})
 }
 
-func HandleHypervisorGetEmptyCPUInfoSuccessfully(t *testing.T) {
-	testhelper.Mux.HandleFunc("/os-hypervisors/"+HypervisorFake.ID, func(w http.ResponseWriter, r *http.Request) {
-		testhelper.TestMethod(t, r, "GET")
-		testhelper.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+func HandleHypervisorGetEmptyCPUInfoSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/os-hypervisors/"+HypervisorFake.ID, func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, HypervisorGetEmptyCPUInfoBody)
 	})
 }
 
-func HandleHypervisorUptimeSuccessfully(t *testing.T) {
-	testhelper.Mux.HandleFunc("/os-hypervisors/"+HypervisorFake.ID+"/uptime", func(w http.ResponseWriter, r *http.Request) {
-		testhelper.TestMethod(t, r, "GET")
-		testhelper.TestHeader(t, r, "X-Auth-Token", client.TokenID)
+func HandleHypervisorUptimeSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/os-hypervisors/"+HypervisorFake.ID+"/uptime", func(w http.ResponseWriter, r *http.Request) {
+		th.TestMethod(t, r, "GET")
+		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
 		w.Header().Add("Content-Type", "application/json")
 		fmt.Fprintf(w, HypervisorUptimeBody)

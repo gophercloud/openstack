@@ -22,4 +22,4 @@ if [[ -z "${LOG_DIR}" ]]; then
 fi
 mkdir -p ${LOG_DIR}
 
-go test -v -timeout $timeout -tags "fixtures acceptance" ${PACKAGE:-./internal/acceptance/openstack/...} $@ |& tee -a ${LOG_DIR}/acceptance_tests.log
+go test -v -shuffle on -timeout $timeout -tags "fixtures acceptance" ${PACKAGE:-./internal/acceptance/openstack/...} $@ |& tee -a ${LOG_DIR}/acceptance_tests.log

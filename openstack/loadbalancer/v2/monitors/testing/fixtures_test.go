@@ -140,8 +140,8 @@ var (
 )
 
 // HandleHealthmonitorListSuccessfully sets up the test server to respond to a healthmonitor List request.
-func HandleHealthmonitorListSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/v2.0/lbaas/healthmonitors", func(w http.ResponseWriter, r *http.Request) {
+func HandleHealthmonitorListSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/v2.0/lbaas/healthmonitors", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "GET")
 		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
@@ -163,8 +163,8 @@ func HandleHealthmonitorListSuccessfully(t *testing.T) {
 
 // HandleHealthmonitorCreationSuccessfully sets up the test server to respond to a healthmonitor creation request
 // with a given response.
-func HandleHealthmonitorCreationSuccessfully(t *testing.T, response string) {
-	th.Mux.HandleFunc("/v2.0/lbaas/healthmonitors", func(w http.ResponseWriter, r *http.Request) {
+func HandleHealthmonitorCreationSuccessfully(t *testing.T, fakeServer th.FakeServer, response string) {
+	fakeServer.Mux.HandleFunc("/v2.0/lbaas/healthmonitors", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "POST")
 		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 		th.TestJSONRequest(t, r, `{
@@ -189,8 +189,8 @@ func HandleHealthmonitorCreationSuccessfully(t *testing.T, response string) {
 }
 
 // HandleHealthmonitorGetSuccessfully sets up the test server to respond to a healthmonitor Get request.
-func HandleHealthmonitorGetSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/v2.0/lbaas/healthmonitors/5d4b5228-33b0-4e60-b225-9b727c1a20e7", func(w http.ResponseWriter, r *http.Request) {
+func HandleHealthmonitorGetSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/v2.0/lbaas/healthmonitors/5d4b5228-33b0-4e60-b225-9b727c1a20e7", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "GET")
 		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 		th.TestHeader(t, r, "Accept", "application/json")
@@ -200,8 +200,8 @@ func HandleHealthmonitorGetSuccessfully(t *testing.T) {
 }
 
 // HandleHealthmonitorDeletionSuccessfully sets up the test server to respond to a healthmonitor deletion request.
-func HandleHealthmonitorDeletionSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/v2.0/lbaas/healthmonitors/5d4b5228-33b0-4e60-b225-9b727c1a20e7", func(w http.ResponseWriter, r *http.Request) {
+func HandleHealthmonitorDeletionSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/v2.0/lbaas/healthmonitors/5d4b5228-33b0-4e60-b225-9b727c1a20e7", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "DELETE")
 		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 
@@ -210,8 +210,8 @@ func HandleHealthmonitorDeletionSuccessfully(t *testing.T) {
 }
 
 // HandleHealthmonitorUpdateSuccessfully sets up the test server to respond to a healthmonitor Update request.
-func HandleHealthmonitorUpdateSuccessfully(t *testing.T) {
-	th.Mux.HandleFunc("/v2.0/lbaas/healthmonitors/5d4b5228-33b0-4e60-b225-9b727c1a20e7", func(w http.ResponseWriter, r *http.Request) {
+func HandleHealthmonitorUpdateSuccessfully(t *testing.T, fakeServer th.FakeServer) {
+	fakeServer.Mux.HandleFunc("/v2.0/lbaas/healthmonitors/5d4b5228-33b0-4e60-b225-9b727c1a20e7", func(w http.ResponseWriter, r *http.Request) {
 		th.TestMethod(t, r, "PUT")
 		th.TestHeader(t, r, "X-Auth-Token", client.TokenID)
 		th.TestHeader(t, r, "Accept", "application/json")
