@@ -62,7 +62,6 @@ type CreateOptsBuilder interface {
 
 // CreateOpts contains all the values needed to create a new address group.
 type CreateOpts struct {
-
 	// The address group ID to associate with this address group.
 	ID string `json:"id,omitempty"`
 
