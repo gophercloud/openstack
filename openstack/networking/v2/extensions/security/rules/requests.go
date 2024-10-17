@@ -20,7 +20,7 @@ type ListOpts struct {
 	PortRangeMax       int    `q:"port_range_max"`
 	PortRangeMin       int    `q:"port_range_min"`
 	Protocol           string `q:"protocol"`
-	RemoteAddressGroup string `q:"remote_address_group_id"`
+	RemoteAddressGroupID string `q:"remote_address_group_id"`
 	RemoteGroupID      string `q:"remote_group_id"`
 	RemoteIPPrefix     string `q:"remote_ip_prefix"`
 	SecGroupID         string `q:"security_group_id"`
