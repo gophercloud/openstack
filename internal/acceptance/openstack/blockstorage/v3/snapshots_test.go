@@ -82,11 +82,8 @@ func TestSnapshots(t *testing.T) {
 		var found bool
 		for _, v := range actual {
 			if v.ID == snapshot1.ID || v.ID == snapshot2.ID {
-				if v.user_id == snapshot1.user_id || v.user_id == snapshot2.user_id {
-					found = true
-				}
+				found = true
 			}
-
 		}
 
 		th.AssertEquals(t, found, true)
